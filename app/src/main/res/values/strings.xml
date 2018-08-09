@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">轻账本</string>
+    <string name="log_off">退出登录</string>
+    <string name="version_info">版本信息</string>
+    <string name="about_developer">关于我们</string>
+    <string name="str">Simple</string>
+    <string name="username">昵称：</string>
+    <string name="username_hint">请输入用户名</string>
+    <string name="email_hint">请输入邮箱</string>
+    <string name="pssword">密码：</string>
+    <string name="pw_hint">请输入密码</string>
+    <string name="re_pw_hint">确认密码</string>
+    <string name="forgot_pw">忘记密码</string>
+    <string name="remenber_pw">记住密码</string>
+    <string name="login">登录</string>
+    <string name="register_hint">没有账号？点此</string>
+    <string name="register">注册</string>
+    <string name="expense">合计：%1$.2f</string>
+    <string name="selector">收/支</string>
+    <string name="money">金额</string>
+    <string name="Zero">0</string>
+    <string name="date">日期</string>
+    <string name="remark">备注</string>
+    <string name="daily">日常</string>
+    <string name="delete">删除</string>
+    <string name="modify">修改</string>
+</resources>

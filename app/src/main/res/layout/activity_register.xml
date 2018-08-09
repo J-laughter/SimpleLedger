@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.RegisterActivity">
+
+    <include layout="@layout/toolbar"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp">
+
+        <EditText
+            android:id="@+id/name_edit_register"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:hint="@string/username_hint"
+            android:maxLines="1"
+            android:inputType="textNoSuggestions"
+            android:textSize="18sp"
+            android:textColor="@color/colorBlack"
+            android:textCursorDrawable="@null"
+            android:background="@null"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.001dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/colorText"/>
+
+        <EditText
+            android:id="@+id/email_edit_register"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:hint="@string/email_hint"
+            android:maxLines="1"
+            android:inputType="textEmailAddress"
+            android:textSize="18sp"
+            android:textColor="@color/colorBlack"
+            android:textCursorDrawable="@null"
+            android:background="@null"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.001dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/colorText"/>
+
+        <EditText
+            android:id="@+id/password_edit_register"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:hint="@string/pw_hint"
+            android:maxLines="1"
+            android:inputType="textPassword"
+            android:textSize="18sp"
+            android:textColor="@color/colorBlack"
+            android:textCursorDrawable="@null"
+            android:background="@null"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.001dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/colorText"/>
+
+        <EditText
+            android:id="@+id/verify_pw_edit_register"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:hint="@string/re_pw_hint"
+            android:maxLines="1"
+            android:inputType="textPassword"
+            android:textSize="18sp"
+            android:textColor="@color/colorBlack"
+            android:textCursorDrawable="@null"
+            android:background="@null"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.001dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="20dp"
+            android:background="@color/colorText"/>
+
+        <Button
+            android:id="@+id/register_but_register"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:background="@drawable/button_selector"
+            android:text="@string/register"
+            android:textColor="@color/colorWhite"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<litepal>
+    <dbname value = "SimpleLedger"/>
+    <version value = "4"/>
+
+    <list>
+        <mapping class="com.example.laughter.simpleledger.bean.DbRecord"/>
+    </list>
+</litepal>
