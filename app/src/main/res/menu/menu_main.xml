@@ -6,10 +6,6 @@
         android:title="@string/about_developer" />
 
     <item
-        android:id="@+id/version_info"
-        android:title="@string/version_info"/>
-
-    <item
         android:id="@+id/log_off"
         android:title="@string/log_off"/>
 

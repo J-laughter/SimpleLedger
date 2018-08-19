@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.laughter.simpleledger.R;
 import com.example.laughter.simpleledger.adapter.RecordsAdapter;
@@ -36,6 +37,7 @@ public class MainActivity extends PermissionCheckUtility {
     private List<DbRecord> recordList = new ArrayList<>();
     private RecordsAdapter adapter;
     private ListView listView;
+    private TextView textBlank;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +91,7 @@ public class MainActivity extends PermissionCheckUtility {
                 startActivity(intent);
             }
         });
+        textBlank = (TextView)findViewById(R.id.text_blank);
     }
 
     @Override
@@ -104,15 +107,16 @@ public class MainActivity extends PermissionCheckUtility {
                 default:
                     break;
                 case R.id.about_developer:
-                    break;
-                case R.id.version_info:
+                    Intent intent1 = new Intent(MainActivity.this, AboutActivity.class);
+                    startActivity(intent1);
                     break;
                 case R.id.log_off:
                     SharedPreferences.Editor editor = getSharedPreferences("userInfo", MODE_PRIVATE).edit();
                     editor.putBoolean("idLogin",false);
                     editor.apply();
-                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivity(intent);
+                    LitePal.deleteAll(DbRecord.class);
+                    Intent intent3 = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(intent3);
                     finish();
                     break;
             }
@@ -128,6 +132,8 @@ public class MainActivity extends PermissionCheckUtility {
     private void queryDateFromDatebase(){
         List<DbRecord> list = LitePal.order("date desc").find(DbRecord.class);
         if (list.size() > 0){
+            listView.setVisibility(View.VISIBLE);
+            textBlank.setVisibility(View.GONE);
             groupByDbDate(list);
             adapter.notifyDataSetChanged();
         }else {
@@ -163,12 +169,16 @@ public class MainActivity extends PermissionCheckUtility {
         query.order("-date");
         query.findObjects(new FindListener<BmobRecord>() {
             @Override
-            public void done(List<BmobRecord> records, BmobException e) {
+            public void done(final List<BmobRecord> records, BmobException e) {
                 if (e == null) {
                     groupByBmobDate(records);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            if (records.size()==0){
+                                textBlank.setVisibility(View.VISIBLE);
+                                listView.setVisibility(View.GONE);
+                            }
                             adapter.notifyDataSetChanged();
                             closeProgressDialog();
                         }

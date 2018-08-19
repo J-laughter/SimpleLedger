@@ -104,8 +104,25 @@ public class ModifyActivity extends AppCompatActivity implements View.OnClickLis
                 });
                 break;
             case R.id.back_but_toolbar :
+                Intent intent = new Intent(ModifyActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
                 break;
             case R.id.but_delete_mod :
+                BmobRecord record = new BmobRecord();
+                record.setObjectId(objectId);
+                record.delete(new UpdateListener() {
+                    @Override
+                    public void done(BmobException e) {
+                        if (e == null){
+                            LitePal.deleteAll(DbRecord.class, "objectId = ?",objectId);
+                            Toast.makeText(ModifyActivity.this, "已删除", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(ModifyActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
+                });
                 break;
         }
     }

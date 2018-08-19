@@ -24,11 +24,11 @@
             android:layout_height="match_parent"
             app:srlEnablePreviewInEditMode="true">
 
-            <com.scwang.smartrefresh.layout.header.ClassicsHeader
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:srlPrimaryColor="@color/colorBlack"
-                app:srlAccentColor="@color/colorText"/>
+            <!--<com.scwang.smartrefresh.layout.header.ClassicsHeader-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--app:srlPrimaryColor="@color/colorBlack"-->
+                <!--app:srlAccentColor="@color/colorText"/>-->
 
             <ListView
                 android:id="@+id/list_view_main"
@@ -36,6 +36,16 @@
                 android:layout_height="match_parent"/>
 
         </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+        <TextView
+            android:id="@+id/text_blank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:text="@string/blank"
+            android:textSize="18sp"
+            android:textColor="@color/colorPrimary"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_add"

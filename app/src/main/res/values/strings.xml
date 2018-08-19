@@ -24,4 +24,11 @@
     <string name="daily">日常</string>
     <string name="delete">删除</string>
     <string name="modify">修改</string>
+    <string name="about">关于我们</string>
+    <string name="call_us">想联系我</string>
+    <string name="support">想支持我</string>
+    <string name="csdn">我的博客</string>
+    <string name="copyright">copyright by : J-laughter. All rights reserved.</string>
+    <string name="version">版本号：%1$s</string>
+    <string name="blank">开始你的记账之旅吧</string>
 </resources>

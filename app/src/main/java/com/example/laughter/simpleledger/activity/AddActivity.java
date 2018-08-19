@@ -47,7 +47,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         initDefault();
     }
 
-    public void setToolbar(){
+    private void setToolbar(){
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar_diy);
         toolbar.setTitle("");
         TextView title = (TextView)findViewById(R.id.title_toolbar);

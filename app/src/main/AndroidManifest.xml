@@ -35,7 +35,9 @@
         <activity android:name=".activity.RegisterActivity" />
         <activity android:name=".util.PermissionCheckUtility" />
         <activity android:name=".activity.AddActivity" />
-        <activity android:name=".activity.ModifyActivity"></activity>
+        <activity android:name=".activity.ModifyActivity" />
+        <activity android:name=".activity.AboutActivity" />
+        <activity android:name=".activity.WebActivity"></activity>
     </application>
 
 </manifest>

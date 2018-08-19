@@ -1,7 +1,6 @@
 package com.example.laughter.simpleledger.bean;
 
 import org.litepal.crud.LitePalSupport;
-
 import java.io.Serializable;
 
 public class DbRecord extends LitePalSupport implements Serializable{
