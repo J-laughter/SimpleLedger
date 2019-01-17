@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,50 +14,66 @@ import com.example.laughter.simpleledger.model.DbRecord;
 
 import java.util.List;
 
-public class RecordsAdapter extends ArrayAdapter<DbRecord> {
+public class RecordsAdapter extends BaseAdapter {
 
-    private int resourceId;
+    private Context mContext;
+    private List<DbRecord> recordList;
 
-    public RecordsAdapter(Context context, int resourceId, List<DbRecord> objects) {
-        super(context, resourceId, objects);
-        this.resourceId = resourceId;
+    public RecordsAdapter(Context context, List<DbRecord> objects) {
+        this.mContext = context;
+        this.recordList = objects;
+    }
+
+    @Override
+    public int getCount() {
+        return recordList.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return recordList.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-        DbRecord dbRecord = getItem(position);
-        View view;
-        final ViewHolder viewHolder;
+        DbRecord dbRecord = recordList.get(position);
+        ViewHolder viewHolder;
         if(convertView == null){
             viewHolder = new ViewHolder();
         } else {
-            view = convertView;
-            viewHolder = (ViewHolder)view.getTag();
+            viewHolder = (ViewHolder)convertView.getTag();
         }
         if (dbRecord.getType() == 1){
-            view = LayoutInflater.from(getContext()).inflate(R.layout.item_group,null);
-            viewHolder.date = (TextView) view.findViewById(R.id.text_date);
-            viewHolder.total = (TextView)view.findViewById(R.id.text_total);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_group,null);
+            viewHolder.date = (TextView) convertView.findViewById(R.id.text_date);
+            viewHolder.total = (TextView)convertView.findViewById(R.id.text_total);
             viewHolder.date.setText(dbRecord.getDate());
-            viewHolder.total.setText(String.format(getContext().getString(R.string.expense),
+            viewHolder.total.setText(String.format(mContext.getString(R.string.expense),
                     dbRecord.getMoney()));
         }
         else {
-            view = LayoutInflater.from(getContext()).inflate(resourceId,parent,false);
-            viewHolder.icon = (ImageView)view.findViewById(R.id.img_kind);
-            viewHolder.tab = (TextView)view.findViewById(R.id.text_tab);
-            viewHolder.money = (TextView)view.findViewById(R.id.text_money);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_record, parent,false);
+            viewHolder.icon = (ImageView)convertView.findViewById(R.id.img_kind);
+            viewHolder.tab = (TextView)convertView.findViewById(R.id.text_tab);
+            viewHolder.money = (TextView)convertView.findViewById(R.id.text_money);
             viewHolder.tab.setText(dbRecord.getRemark());
-            if(dbRecord.getMoney() >= 0)
+            if(dbRecord.getMoney() >= 0) {
                 viewHolder.icon.setImageResource(R.drawable.ic_money_blue);
-            else
+            }
+            else {
                 viewHolder.icon.setImageResource(R.drawable.ic_money_red);
+            }
             viewHolder.money.setText(String.valueOf(dbRecord.getMoney()));
         }
-        view.setTag(viewHolder);
+        convertView.setTag(viewHolder);
 
-        return view;
+        return convertView;
     }
 
     class ViewHolder{

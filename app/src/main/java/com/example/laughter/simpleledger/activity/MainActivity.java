@@ -54,7 +54,7 @@ public class MainActivity extends PermissionUtil {
         if (isLogin()){
             setToolbar();
             init();
-            adapter = new RecordsAdapter(this, R.layout.item_record, recordList);
+            adapter = new RecordsAdapter(this, recordList);
             mListView.setAdapter(adapter);
         }else {
             Intent intent = new Intent(MainActivity.this,LoginActivity.class);
