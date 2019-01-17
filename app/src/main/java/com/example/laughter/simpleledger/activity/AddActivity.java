@@ -12,7 +12,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +23,7 @@ import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
@@ -38,11 +38,6 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     @BindView(R.id.edit_remark_add) EditText etRemark;
     @BindView(R.id.text_date_add) TextView tvDate;
     @BindView(R.id.text_kind_add) TextView tvKind;
-
-    @BindView(R.id.rl_kind_add) RelativeLayout rlKind;
-    @BindView(R.id.rl_money_add) RelativeLayout rlMoney;
-    @BindView(R.id.rl_remark_add) RelativeLayout rlRemark;
-    @BindView(R.id.rl_date_add) RelativeLayout rlDate;
 
     private String[] kindArray = new String[]{"请选择" ,"收入" ,"支出"};
     private int year,month,day,kind;
@@ -74,10 +69,6 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void initDefault(){
-        rlKind.setOnClickListener(this);
-        rlMoney.setOnClickListener(this);
-        rlRemark.setOnClickListener(this);
-        rlDate.setOnClickListener(this);
         showDefaultData();
     }
 
@@ -166,23 +157,32 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                     }
                 });
                 break;
-            case R.id.rl_date_add:
+        }
+    }
+
+    @OnClick({R.id.text_kind_add, R.id.text_date_add, R.id.edit_remark_add,
+            R.id.edit_money_add})
+    public void click(View view) {
+        switch (view.getId()) {
+            case R.id.text_date_add:
                 new DatePickerDialog(AddActivity.this,onDateSetListener,year,month-1,day).show();
                 break;
-            case R.id.rl_kind_add:
+            case R.id.text_kind_add:
                 showKindChooseDialog();
                 break;
-            case R.id.rl_money_add:
+            case R.id.edit_money_add:
                 etMoney.setFocusable(true);
                 etMoney.setFocusableInTouchMode(true);
                 etMoney.requestFocus();
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                 break;
-            case R.id.rl_remark_add:
+            case R.id.edit_remark_add:
                 etRemark.setFocusable(true);
                 etRemark.setFocusableInTouchMode(true);
                 etRemark.requestFocus();
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                break;
+            default:
                 break;
         }
     }

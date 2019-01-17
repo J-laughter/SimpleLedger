@@ -16,7 +16,7 @@
     <string name="register_hint">没有账号？点此</string>
     <string name="register">注册</string>
     <string name="expense">合计：%1$.2f</string>
-    <string name="selector">收/支</string>
+    <string name="selector">选择</string>
     <string name="money">金额</string>
     <string name="Zero">0</string>
     <string name="date">日期</string>
@@ -31,4 +31,5 @@
     <string name="copyright">copyright by : J-laughter. All rights reserved.</string>
     <string name="version">版本号：%1$s</string>
     <string name="blank">开始你的记账之旅吧</string>
+    <string name="todo">TODO</string>
 </resources>
