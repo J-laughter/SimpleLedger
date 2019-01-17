@@ -22,7 +22,7 @@ import java.util.List;
  * 需要进行运行时权限检测的Activity可以继承这个类
  */
 
- public class PermissionCheckUtility extends AppCompatActivity{
+ public class PermissionUtil extends AppCompatActivity{
 
     protected String[] needPermissions = {
             Manifest.permission.READ_PHONE_STATE,

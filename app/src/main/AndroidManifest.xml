@@ -33,7 +33,7 @@
         </activity>
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.RegisterActivity" />
-        <activity android:name=".util.PermissionCheckUtility" />
+        <activity android:name=".util.PermissionUtil" />
         <activity android:name=".activity.AddActivity" />
         <activity android:name=".activity.ModifyActivity" />
         <activity android:name=".activity.AboutActivity" />

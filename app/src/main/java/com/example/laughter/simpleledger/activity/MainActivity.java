@@ -2,28 +2,29 @@ package com.example.laughter.simpleledger.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.laughter.simpleledger.R;
 import com.example.laughter.simpleledger.adapter.RecordsAdapter;
-import com.example.laughter.simpleledger.bean.BmobRecord;
-import com.example.laughter.simpleledger.bean.DbRecord;
-import com.example.laughter.simpleledger.util.PermissionCheckUtility;
+import com.example.laughter.simpleledger.model.BmobRecord;
+import com.example.laughter.simpleledger.model.DbRecord;
+import com.example.laughter.simpleledger.util.PermissionUtil;
+import com.example.laughter.simpleledger.util.SpUtil;
 
 import org.litepal.LitePal;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
@@ -31,18 +32,22 @@ import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-public class MainActivity extends PermissionCheckUtility {
+public class MainActivity extends PermissionUtil {
+
+    @BindView(R.id.list_view_main) ListView mListView;
+    @BindView(R.id.text_blank) TextView tvBlank;
+    @BindView(R.id.fab_add) FloatingActionButton fabAdd;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
 
     private ProgressDialog progressDialog;
     private List<DbRecord> recordList = new ArrayList<>();
     private RecordsAdapter adapter;
-    private ListView listView;
-    private TextView textBlank;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         //Bmob默认初始化
         Bmob.initialize(this, "b41e662d256ba141c87f5c04beb23f35");
 
@@ -50,7 +55,7 @@ public class MainActivity extends PermissionCheckUtility {
             setToolbar();
             init();
             adapter = new RecordsAdapter(this, R.layout.item_record, recordList);
-            listView.setAdapter(adapter);
+            mListView.setAdapter(adapter);
         }else {
             Intent intent = new Intent(MainActivity.this,LoginActivity.class);
             startActivity(intent);
@@ -65,33 +70,23 @@ public class MainActivity extends PermissionCheckUtility {
     }
 
     private void setToolbar(){
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.app_name);
-        toolbar.setTitleTextColor(getResources().getColor(R.color.colorWhite));
-        setSupportActionBar(toolbar);
-        toolbar.setOnMenuItemClickListener(onMenuItemClick);
+        mToolbar.setTitle(R.string.app_name);
+        mToolbar.setTitleTextColor(getResources().getColor(R.color.colorWhite));
+        setSupportActionBar(mToolbar);
+        mToolbar.setOnMenuItemClickListener(onMenuItemClick);
     }
 
     private void init(){
-        FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab_add);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,AddActivity.class);
-                startActivity(intent);
-            }
+        fabAdd.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this,AddActivity.class);
+            startActivity(intent);
         });
 
-        listView = (ListView)findViewById(R.id.list_view_main);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Intent intent = new Intent(MainActivity.this, ModifyActivity.class);
-                intent.putExtra("record", recordList.get(position));
-                startActivity(intent);
-            }
+        mListView.setOnItemClickListener((adapterView, view, position, l) -> {
+            Intent intent = new Intent(MainActivity.this, ModifyActivity.class);
+            intent.putExtra("record", recordList.get(position));
+            startActivity(intent);
         });
-        textBlank = (TextView)findViewById(R.id.text_blank);
     }
 
     @Override
@@ -111,9 +106,8 @@ public class MainActivity extends PermissionCheckUtility {
                     startActivity(intent1);
                     break;
                 case R.id.log_off:
-                    SharedPreferences.Editor editor = getSharedPreferences("userInfo", MODE_PRIVATE).edit();
-                    editor.putBoolean("idLogin",false);
-                    editor.apply();
+                    SpUtil.putBoolean(getApplicationContext(), "idLogin",false);
+
                     LitePal.deleteAll(DbRecord.class);
                     Intent intent3 = new Intent(MainActivity.this, LoginActivity.class);
                     startActivity(intent3);
@@ -125,15 +119,14 @@ public class MainActivity extends PermissionCheckUtility {
     };
 
     private boolean isLogin(){
-        SharedPreferences spUserInfo = this.getSharedPreferences("userInfo",MODE_PRIVATE);
-        return spUserInfo.getBoolean("isLogin",false);
+        return SpUtil.getBoolean(getApplicationContext(), "isLogin",false);
     }
 
     private void queryDateFromDatebase(){
         List<DbRecord> list = LitePal.order("date desc").find(DbRecord.class);
         if (list.size() > 0){
-            listView.setVisibility(View.VISIBLE);
-            textBlank.setVisibility(View.GONE);
+            mListView.setVisibility(View.VISIBLE);
+            tvBlank.setVisibility(View.GONE);
             groupByDbDate(list);
             adapter.notifyDataSetChanged();
         }else {
@@ -176,8 +169,8 @@ public class MainActivity extends PermissionCheckUtility {
                         @Override
                         public void run() {
                             if (records.size()==0){
-                                textBlank.setVisibility(View.VISIBLE);
-                                listView.setVisibility(View.GONE);
+                                tvBlank.setVisibility(View.VISIBLE);
+                                mListView.setVisibility(View.GONE);
                             }
                             adapter.notifyDataSetChanged();
                             closeProgressDialog();

@@ -12,20 +12,29 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.laughter.simpleledger.R;
-import com.example.laughter.simpleledger.bean.BmobRecord;
-import com.example.laughter.simpleledger.bean.DbRecord;
+import com.example.laughter.simpleledger.model.BmobRecord;
+import com.example.laughter.simpleledger.model.DbRecord;
 
 import org.litepal.LitePal;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
 
 public class ModifyActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private TextView text_kind;
-    private TextView text_date;
-    private EditText edit_remark;
-    private EditText edit_money;
+    @BindView(R.id.toolbar_diy) Toolbar mToolbar;
+    @BindView(R.id.title_toolbar) TextView tvTitle;
+    @BindView(R.id.back_but_toolbar) Button butBack;
+    @BindView(R.id.menu_but_toolbar) Button butConfirm;
+
+    @BindView(R.id.text_kind_mod) TextView tvKind;
+    @BindView(R.id.text_date_mod) TextView tvDate;
+    @BindView(R.id.edit_remark_mod) EditText etRemark;
+    @BindView(R.id.edit_money_mod) EditText etMoney;
+    @BindView(R.id.but_delete_mod) Button butDelete;
+
     private String objectId;
     private BmobRecord bmobRecord;
 
@@ -33,44 +42,36 @@ public class ModifyActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify);
+        ButterKnife.bind(this);
 
         setToolbar();
         initDate();
     }
 
     private void setToolbar(){
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar_diy);
-        toolbar.setTitle("");
-        TextView title = (TextView)findViewById(R.id.title_toolbar);
-        title.setText(R.string.modify);
+        mToolbar.setTitle("");
+        tvTitle.setText(R.string.modify);
 
-        Button back = (Button)findViewById(R.id.back_but_toolbar);
-        back.setVisibility(View.VISIBLE);
-        back.setBackgroundResource(R.drawable.back_selector);
-        back.setOnClickListener(this);
+        butBack.setVisibility(View.VISIBLE);
+        butBack.setBackgroundResource(R.drawable.back_selector);
+        butBack.setOnClickListener(this);
 
-        Button confirm = (Button)findViewById(R.id.menu_but_toolbar);
-        confirm.setBackgroundResource(R.drawable.confirm_selector);
-        confirm.setVisibility(View.VISIBLE);
-        confirm.setOnClickListener(this);
+        butConfirm.setBackgroundResource(R.drawable.confirm_selector);
+        butConfirm.setVisibility(View.VISIBLE);
+        butConfirm.setOnClickListener(this);
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(mToolbar);
     }
 
     private void initDate(){
-        text_kind = (TextView)findViewById(R.id.text_kind_mod);
-        text_date = (TextView)findViewById(R.id.text_date_mod);
-        edit_remark = (EditText)findViewById(R.id.edit_remark_mod);
-        edit_money = (EditText)findViewById(R.id.edit_money_mod);
-        Button delete = (Button)findViewById(R.id.but_delete_mod);
-        delete.setOnClickListener(this);
+        butDelete.setOnClickListener(this);
 
         Intent intent = getIntent();
         DbRecord record = (DbRecord) intent.getSerializableExtra("record");
-        text_kind.setText(record.getMoney() > 0 ? "收入" : "支出");
-        text_date.setText(record.getDate());
-        edit_remark.setText(record.getRemark());
-        edit_money.setText(String.valueOf(Math.abs(record.getMoney())));
+        tvKind.setText(record.getMoney() > 0 ? "收入" : "支出");
+        tvDate.setText(record.getDate());
+        etRemark.setText(record.getRemark());
+        etMoney.setText(String.valueOf(Math.abs(record.getMoney())));
         objectId = record.getObjectId();
     }
 
@@ -81,11 +82,11 @@ public class ModifyActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.menu_but_toolbar :
                 bmobRecord = new BmobRecord();
-                bmobRecord.setRemark(edit_remark.getText().toString());
-                if (text_kind.getText().toString().equals("收入")){
-                    bmobRecord.setMoney(Float.parseFloat(edit_money.getText().toString()));
+                bmobRecord.setRemark(etRemark.getText().toString());
+                if (tvKind.getText().toString().equals("收入")){
+                    bmobRecord.setMoney(Float.parseFloat(etMoney.getText().toString()));
                 }else {
-                    bmobRecord.setMoney(-Float.parseFloat(edit_money.getText().toString()));
+                    bmobRecord.setMoney(-Float.parseFloat(etMoney.getText().toString()));
                 }
                 bmobRecord.update(objectId, new UpdateListener() {
                     @Override

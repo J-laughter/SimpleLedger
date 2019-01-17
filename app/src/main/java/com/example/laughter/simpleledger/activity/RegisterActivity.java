@@ -1,78 +1,65 @@
 package com.example.laughter.simpleledger.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 
 import com.example.laughter.simpleledger.R;
+import com.example.laughter.simpleledger.util.SpUtil;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    @BindView(R.id.name_edit_register) EditText etUserName;
+    @BindView(R.id.email_edit_register) EditText etEmail;
+    @BindView(R.id.password_edit_register) EditText etPassword;
+    @BindView(R.id.verify_pw_edit_register) EditText etVerifyPw;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.back_but_toolbar) Button butBack;
+    @BindView(R.id.title_toolbar) TextView tvTitle;
+    @BindView(R.id.register_but_register) Button butRegister;
+
     private BmobUser user;
-    private EditText edit_userName;
-    private EditText edit_email;
-    private EditText edit_password;
-    private EditText edit_verifyPw;
-    private SharedPreferences spUserInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        ButterKnife.bind(this);
 
         setToolBar();
         initView();
     }
 
     private void setToolBar(){
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar_diy);
-        toolbar.setTitle("");
-        Button back = (Button)findViewById(R.id.back_but_toolbar);
-        back.setBackgroundResource(R.drawable.back_selector);
-        back.setVisibility(View.VISIBLE);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-        TextView title = (TextView)findViewById(R.id.title_toolbar);
-        title.setText(R.string.register);
+        mToolbar.setTitle("");
+        butBack.setBackgroundResource(R.drawable.back_selector);
+        butBack.setVisibility(View.VISIBLE);
+        butBack.setOnClickListener(view -> finish());
+        tvTitle.setText(R.string.register);
+        setSupportActionBar(mToolbar);
     }
 
     private void initView(){
-        edit_userName = (EditText)findViewById(R.id.name_edit_register);
-        edit_email = (EditText)findViewById(R.id.email_edit_register);
-        edit_password = (EditText)findViewById(R.id.password_edit_register);
-        edit_verifyPw = (EditText)findViewById(R.id.verify_pw_edit_register);
-        Button register = (Button)findViewById(R.id.register_but_register);
-        register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                judge();
-            }
-        });
+        butRegister.setOnClickListener(view -> judge());
     }
 
     private void judge(){
-        String username = edit_userName.getText().toString();
-        String email = edit_email.getText().toString();
-        String password = edit_password.getText().toString();
-        String verifyPw = edit_verifyPw.getText().toString();
+        String username = etUserName.getText().toString();
+        String email = etEmail.getText().toString();
+        String password = etPassword.getText().toString();
+        String verifyPw = etVerifyPw.getText().toString();
 
         if (username.equals("")){
             Toast.makeText(RegisterActivity.this,"请输入昵称",Toast.LENGTH_SHORT).show();
@@ -96,15 +83,13 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void register(){
-        spUserInfo = this.getSharedPreferences("userInfo",MODE_PRIVATE);
         user.signUp(new SaveListener<BmobUser>() {
             @Override
             public void done(BmobUser bmobUser, BmobException e) {
                 if(e==null){
-                    Editor editor = spUserInfo.edit();
-                    editor.putString("username",edit_userName.getText().toString());
-                    editor.putString("password",edit_password.getText().toString());
-                    editor.apply();
+                    SpUtil.putString(getApplicationContext(), "username",etUserName.getText().toString());
+                    SpUtil.putString(getApplicationContext(), "password",etPassword.getText().toString());
+
                     Toast.makeText(RegisterActivity.this,"注册成功",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
                     startActivity(intent);

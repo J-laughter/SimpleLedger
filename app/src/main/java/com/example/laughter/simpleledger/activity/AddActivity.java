@@ -1,9 +1,7 @@
 package com.example.laughter.simpleledger.activity;
 
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -19,21 +17,33 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.laughter.simpleledger.R;
-import com.example.laughter.simpleledger.bean.BmobRecord;
-import com.example.laughter.simpleledger.bean.DbRecord;
+import com.example.laughter.simpleledger.model.BmobRecord;
+import com.example.laughter.simpleledger.model.DbRecord;
 
 import java.util.Calendar;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 
 public class AddActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private EditText edit_money;
-    private EditText edit_remark;
-    private TextView text_date;
-    private TextView text_kind;
+    @BindView(R.id.toolbar_diy) Toolbar mToolbar;
+    @BindView(R.id.back_but_toolbar) Button butBack;
+    @BindView(R.id.menu_but_toolbar) Button butConfirm;
+    @BindView(R.id.title_toolbar) TextView tvTitle;
+    @BindView(R.id.edit_money_add) EditText etMoney;
+    @BindView(R.id.edit_remark_add) EditText etRemark;
+    @BindView(R.id.text_date_add) TextView tvDate;
+    @BindView(R.id.text_kind_add) TextView tvKind;
+
+    @BindView(R.id.rl_kind_add) RelativeLayout rlKind;
+    @BindView(R.id.rl_money_add) RelativeLayout rlMoney;
+    @BindView(R.id.rl_remark_add) RelativeLayout rlRemark;
+    @BindView(R.id.rl_date_add) RelativeLayout rlDate;
+
     private String[] kindArray = new String[]{"请选择" ,"收入" ,"支出"};
     private int year,month,day,kind;
     private BmobRecord bmobRecord;
@@ -42,43 +52,32 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
+        ButterKnife.bind(this);
 
         setToolbar();
         initDefault();
     }
 
     private void setToolbar(){
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar_diy);
-        toolbar.setTitle("");
-        TextView title = (TextView)findViewById(R.id.title_toolbar);
-        title.setText(R.string.selector);
+        mToolbar.setTitle("");
+        tvTitle.setText(R.string.selector);
 
-        Button back = (Button)findViewById(R.id.back_but_toolbar);
-        back.setVisibility(View.VISIBLE);
-        back.setBackgroundResource(R.drawable.back_selector);
-        back.setOnClickListener(this);
+        butBack.setVisibility(View.VISIBLE);
+        butBack.setBackgroundResource(R.drawable.back_selector);
+        butBack.setOnClickListener(this);
 
-        Button confirm = (Button)findViewById(R.id.menu_but_toolbar);
-        confirm.setBackgroundResource(R.drawable.confirm_selector);
-        confirm.setVisibility(View.VISIBLE);
-        confirm.setOnClickListener(this);
+        butConfirm.setBackgroundResource(R.drawable.confirm_selector);
+        butConfirm.setVisibility(View.VISIBLE);
+        butConfirm.setOnClickListener(this);
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(mToolbar);
     }
 
     private void initDefault(){
-        edit_money = (EditText) findViewById(R.id.edit_money_add);
-        edit_remark = (EditText) findViewById(R.id.edit_remark_add);
-        text_date = (TextView)findViewById(R.id.text_date_add);
-        text_kind = (TextView)findViewById(R.id.text_kind_add);
-        RelativeLayout rl_kind = (RelativeLayout)findViewById(R.id.rl_kind_add);
-        rl_kind.setOnClickListener(this);
-        RelativeLayout rl_money = (RelativeLayout)findViewById(R.id.rl_money_add);
-        rl_money.setOnClickListener(this);
-        RelativeLayout rl_remark = (RelativeLayout)findViewById(R.id.rl_remark_add);
-        rl_remark.setOnClickListener(this);
-        RelativeLayout rl_date = (RelativeLayout)findViewById(R.id.rl_date_add);
-        rl_date.setOnClickListener(this);
+        rlKind.setOnClickListener(this);
+        rlMoney.setOnClickListener(this);
+        rlRemark.setOnClickListener(this);
+        rlDate.setOnClickListener(this);
         showDefaultData();
     }
 
@@ -96,7 +95,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             strDay = "0" + day;
         }
         String date = year + "-" + strMonth + "-" + strDay;
-        text_date.setText(date);
+        tvDate.setText(date);
     }
 
     private DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -112,7 +111,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                 strDay = "0" + dayOfMonth;
             }
             String date = year + "-" + strMonth + "-" + strDay;
-            text_date.setText(date);
+            tvDate.setText(date);
         }
     };
 
@@ -133,22 +132,22 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                     Toast.makeText(AddActivity.this, "请选择类型", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (TextUtils.isEmpty(edit_money.getText().toString())){
+                if (TextUtils.isEmpty(etMoney.getText().toString())){
                     Toast.makeText(AddActivity.this, "请输入金额", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (TextUtils.isEmpty(edit_remark.getText().toString())){
+                if (TextUtils.isEmpty(etRemark.getText().toString())){
                     Toast.makeText(AddActivity.this, "请输入备注", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 float money = 0;
                 if (kind == 1){
-                    money = Float.parseFloat(edit_money.getText().toString());
+                    money = Float.parseFloat(etMoney.getText().toString());
                 }else {
-                    money = -Float.parseFloat(edit_money.getText().toString());
+                    money = -Float.parseFloat(etMoney.getText().toString());
                 }
-                String remark = edit_remark.getText().toString();
-                String date = text_date.getText().toString();
+                String remark = etRemark.getText().toString();
+                String date = tvDate.getText().toString();
                 bmobRecord = new BmobRecord(remark, money, date, 0);
                 bmobRecord.setUser(BmobUser.getCurrentUser());
                 bmobRecord.save(new SaveListener<String>() {
@@ -174,15 +173,15 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                 showKindChooseDialog();
                 break;
             case R.id.rl_money_add:
-                edit_money.setFocusable(true);
-                edit_money.setFocusableInTouchMode(true);
-                edit_money.requestFocus();
+                etMoney.setFocusable(true);
+                etMoney.setFocusableInTouchMode(true);
+                etMoney.requestFocus();
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                 break;
             case R.id.rl_remark_add:
-                edit_remark.setFocusable(true);
-                edit_remark.setFocusableInTouchMode(true);
-                edit_remark.requestFocus();
+                etRemark.setFocusable(true);
+                etRemark.setFocusableInTouchMode(true);
+                etRemark.requestFocus();
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                 break;
         }
@@ -190,15 +189,12 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
     private void showKindChooseDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);// 自定义对话框
-        builder.setSingleChoiceItems(kindArray, 0, new DialogInterface.OnClickListener() {// 2默认的选中
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {// which是被选中的位置
-                // showToast(which+"");
-                text_kind.setText(kindArray[which]);
-                kind = which;
-                dialog.dismiss();// 随便点击一个item消失对话框，不用点击确认取消
-            }
+        // 2默认的选中
+        builder.setSingleChoiceItems(kindArray, 0, (dialog, which) -> {// which是被选中的位置
+            // showToast(which+"");
+            tvKind.setText(kindArray[which]);
+            kind = which;
+            dialog.dismiss();// 随便点击一个item消失对话框，不用点击确认取消
         });
         builder.show();// 让弹出框显示
     }

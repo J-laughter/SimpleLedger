@@ -1,23 +1,32 @@
-package com.example.laughter.simpleledger.bean;
+package com.example.laughter.simpleledger.model;
 
-import cn.bmob.v3.BmobObject;
-import cn.bmob.v3.BmobUser;
+import org.litepal.crud.LitePalSupport;
+import java.io.Serializable;
 
-public class BmobRecord extends BmobObject {
+public class DbRecord extends LitePalSupport implements Serializable{
 
     private String remark;
     private float money;
     private String date;
     private int type;
-    private BmobUser user;
+    private String objectId;
 
-    public BmobRecord(){}
+    public DbRecord(){}
 
-    public BmobRecord(String remark, float money, String date, int type){
+    public DbRecord(String remark, float money, String date, int type, String objectId){
         this.remark = remark;
         this.money = money;
         this.date = date;
         this.type = type;
+        this.objectId = objectId;
+    }
+
+    public DbRecord(BmobRecord record, String objectId){
+        this.remark = record.getRemark();
+        this.money = record.getMoney();
+        this.date = record.getDate();
+        this.type = record.getType();
+        this.objectId = objectId;
     }
 
     public String getRemark() {
@@ -52,11 +61,11 @@ public class BmobRecord extends BmobObject {
         this.type = type;
     }
 
-    public BmobUser getUser() {
-        return user;
+    public String getObjectId() {
+        return objectId;
     }
 
-    public void setUser(BmobUser user) {
-        this.user = user;
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
     }
 }

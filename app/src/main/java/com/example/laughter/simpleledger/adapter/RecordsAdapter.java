@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.laughter.simpleledger.R;
-import com.example.laughter.simpleledger.bean.DbRecord;
+import com.example.laughter.simpleledger.model.DbRecord;
 
 import java.util.List;
 

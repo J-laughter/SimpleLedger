@@ -9,7 +9,7 @@ import android.content.pm.PackageManager;
 
 import java.net.URISyntaxException;
 
-public class AlipayUtility {
+public class AlipayUtil {
 
     // 支付宝包名
     private static final String ALIPAY_PACKAGE_NAME = "com.eg.android.AlipayGphone";

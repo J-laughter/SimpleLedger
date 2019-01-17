@@ -14,35 +14,43 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.laughter.simpleledger.R;
-import com.example.laughter.simpleledger.util.AlipayUtility;
+import com.example.laughter.simpleledger.util.AlipayUtil;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class AboutActivity extends AppCompatActivity implements View.OnClickListener{
+
+    @BindView(R.id.toolbar_diy) Toolbar mToolbar;
+    @BindView(R.id.back_but_toolbar) Button butBack;
+    @BindView(R.id.title_toolbar) TextView tvTitle;
+    @BindView(R.id.text_version) TextView tvVersion;
+    @BindView(R.id.text_call) TextView tvCall;
+    @BindView(R.id.text_csdn) TextView tvCsdn;
+    @BindView(R.id.text_support) TextView tvSupport;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
+        ButterKnife.bind(this);
 
         setToolbar();
         initDefaultDate();
     }
 
     private void setToolbar(){
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar_diy);
-        toolbar.setTitle("");
-        TextView title = (TextView)findViewById(R.id.title_toolbar);
-        title.setText(R.string.about);
+        mToolbar.setTitle("");
+        tvTitle.setText(R.string.about);
 
-        Button back = (Button)findViewById(R.id.back_but_toolbar);
-        back.setVisibility(View.VISIBLE);
-        back.setBackgroundResource(R.drawable.back_selector);
-        back.setOnClickListener(this);
+        butBack.setVisibility(View.VISIBLE);
+        butBack.setBackgroundResource(R.drawable.back_selector);
+        butBack.setOnClickListener(this);
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(mToolbar);
     }
 
     private void initDefaultDate(){
-        TextView text_version = (TextView)findViewById(R.id.text_version);
         String versionName = null;
         try {
             versionName = getApplicationContext().getPackageManager().
@@ -50,13 +58,11 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        text_version.setText(String.format(this.getString(R.string.version),versionName));
-        TextView text_call = (TextView)findViewById(R.id.text_call);
-        TextView text_csdn = (TextView)findViewById(R.id.text_csdn);
-        TextView text_support = (TextView)findViewById(R.id.text_support);
-        text_call.setOnClickListener(this);
-        text_csdn.setOnClickListener(this);
-        text_support.setOnClickListener(this);
+        tvVersion.setText(String.format(this.getString(R.string.version),versionName));
+
+        tvCall.setOnClickListener(this);
+        tvCsdn.setOnClickListener(this);
+        tvSupport.setOnClickListener(this);
     }
 
     @Override
@@ -74,13 +80,13 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
             case R.id.text_csdn:
                 Intent intent = new Intent(AboutActivity.this, WebActivity.class);
                 intent.putExtra("url","https://blog.csdn.net/laughter_jiang");
-                intent.putExtra("title","我的博客");
+                intent.putExtra("tvTitle","我的博客");
                 startActivity(intent);
                 break;
             case R.id.text_support:
-                if(AlipayUtility.hasInstalledAlipayClient(this)){
+                if(AlipayUtil.hasInstalledAlipayClient(this)){
                     //第二个参数代表要给被支付的二维码code  可以在用草料二维码在线生成
-                    AlipayUtility.startAlipayClient(this, "FKX01042CVV8AHV0VPHXC7");
+                    AlipayUtil.startAlipayClient(this, "FKX01042CVV8AHV0VPHXC7");
                 }else{
                     Toast.makeText(this,"没有检测到支付宝客户端",Toast.LENGTH_SHORT).show();
                 }

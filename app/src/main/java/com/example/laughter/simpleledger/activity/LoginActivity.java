@@ -1,10 +1,8 @@
 package com.example.laughter.simpleledger.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -13,24 +11,30 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.laughter.simpleledger.R;
-import com.example.laughter.simpleledger.util.PermissionCheckUtility;
+import com.example.laughter.simpleledger.util.PermissionUtil;
+import com.example.laughter.simpleledger.util.SpUtil;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 
-public class LoginActivity extends PermissionCheckUtility {
+public class LoginActivity extends PermissionUtil {
+
+    @BindView(R.id.edit_username_login) EditText etUsername;
+    @BindView(R.id.edit_password_login) EditText etPassword;
+    @BindView(R.id.checkbox_login) CheckBox cbPassword;
+    @BindView(R.id.login_but_login) Button butLogin;
+    @BindView(R.id.register_but_login) TextView butRegister;
 
     private BmobUser user;
-    private EditText edit_username;
-    private EditText edit_password;
-    private CheckBox cb_password;
-    private SharedPreferences spUserInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
 
         //设置状态栏透明
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
@@ -41,35 +45,23 @@ public class LoginActivity extends PermissionCheckUtility {
     }
 
     private void initView(){
-        edit_username = (EditText)findViewById(R.id.edit_username_login);
-        edit_password = (EditText)findViewById(R.id.edit_password_login);
-        cb_password = (CheckBox)findViewById(R.id.checkbox_login);
-        Button but_login = (Button)findViewById(R.id.login_but_login);
 
-        spUserInfo = this.getSharedPreferences("userInfo",MODE_PRIVATE);
-        edit_username.setText(spUserInfo.getString("username",null));
-        if (spUserInfo.getBoolean("isChecked",false)){
-            edit_password.setText(spUserInfo.getString("password",null));
-            cb_password.setChecked(true);
+        etUsername.setText(SpUtil.getString(getApplicationContext(), "username", null));
+        if (SpUtil.getBoolean(getApplicationContext(), "isChecked", false)){
+            etPassword.setText(SpUtil.getString(getApplicationContext(), "password",null));
+            cbPassword.setChecked(true);
         }
 
-        but_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                user = new BmobUser();
-                user.setUsername(edit_username.getText().toString());
-                user.setPassword(edit_password.getText().toString());
-                login();
-            }
+        butLogin.setOnClickListener(view -> {
+            user = new BmobUser();
+            user.setUsername(etUsername.getText().toString());
+            user.setPassword(etPassword.getText().toString());
+            login();
         });
 
-        TextView register = (TextView)findViewById(R.id.register_but_login);
-        register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
-                startActivity(intent);
-            }
+        butRegister.setOnClickListener(view -> {
+            Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -79,12 +71,11 @@ public class LoginActivity extends PermissionCheckUtility {
             @Override
             public void done(BmobUser bmobUser, BmobException e) {
                 if (e==null){
-                    SharedPreferences.Editor editor = spUserInfo.edit();
-                    editor.putString("username",edit_username.getText().toString());
-                    editor.putString("password",edit_password.getText().toString());
-                    editor.putBoolean("isChecked",cb_password.isChecked());
-                    editor.putBoolean("isLogin",true);
-                    editor.apply();
+                    SpUtil.putString(getApplicationContext(), "username",etUsername.getText().toString());
+                    SpUtil.putString(getApplicationContext(), "password",etPassword.getText().toString());
+                    SpUtil.putBoolean(getApplicationContext(), "isChecked",cbPassword.isChecked());
+                    SpUtil.putBoolean(getApplicationContext(), "isLogin",true);
+
                     Toast.makeText(LoginActivity.this,"登陆成功",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                     startActivity(intent);

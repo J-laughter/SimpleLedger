@@ -4,6 +4,6 @@
     <version value = "4"/>
 
     <list>
-        <mapping class="com.example.laughter.simpleledger.bean.DbRecord"/>
+        <mapping class="com.example.laughter.simpleledger.model.DbRecord"/>
     </list>
 </litepal>

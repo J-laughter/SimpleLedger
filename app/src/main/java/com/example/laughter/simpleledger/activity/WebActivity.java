@@ -14,43 +14,40 @@ import android.widget.TextView;
 
 import com.example.laughter.simpleledger.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class WebActivity extends AppCompatActivity {
 
-    private ProgressBar progressBar;
-    private WebView webView;
+    @BindView(R.id.progressbar) ProgressBar progressBar;
+    @BindView(R.id.webview) WebView webView;
+    @BindView(R.id.toolbar_diy) Toolbar toolbar;
+    @BindView(R.id.title_toolbar) TextView title;
+    @BindView(R.id.back_but_toolbar) Button back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
+        ButterKnife.bind(this);
 
         setToolbar();
         initDate();
     }
 
     private void setToolbar(){
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar_diy);
         toolbar.setTitle("");
-        TextView title = (TextView)findViewById(R.id.title_toolbar);
         Intent intent = getIntent();
-        title.setText(intent.getStringExtra("title"));
+        title.setText(intent.getStringExtra("tvTitle"));
 
-        Button back = (Button)findViewById(R.id.back_but_toolbar);
         back.setVisibility(View.VISIBLE);
         back.setBackgroundResource(R.drawable.back_selector);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        back.setOnClickListener(view -> finish());
 
         setSupportActionBar(toolbar);
     }
 
     private void initDate(){
-        progressBar= (ProgressBar)findViewById(R.id.progressbar);//进度条
-        webView = (WebView) findViewById(R.id.webview);
         Intent intent = getIntent();
         webView.loadUrl(intent.getStringExtra("url"));//加载url
     }
